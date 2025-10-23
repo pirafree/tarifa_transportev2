@@ -1,0 +1,85 @@
+
+  <title>Calculadora de Tarifas de Transporte</title>
+  <style>
+    body {
+      background-color: #eef6ff; 
+      font-family: Arial, sans-serif;
+      text-align: center; 
+      margin-top: 50px;
+    }
+    h1 {
+      color: #003366;
+    }
+    p {
+      font-size: 18px;
+    }
+    .bus { color: green; }
+    .metro { color: blue; }
+    .taxi { color: orange; }
+    .inter { color: purple; }
+  </style>
+</head>
+<body>
+
+<h1>Calculadora de Tarifas</h1>
+
+<script>
+  
+  let nombre = prompt("Ingrese su nombre:");
+  let tipo = parseInt(prompt("Tipo de transporte:\n1=Bus Urbano\n2=Metro\n3=Taxi\n4=Intermunicipal"));
+  let condicion = parseInt(prompt("Condición especial:\n1=Estudiante\n2=Adulto mayor\n3=Ninguna"));
+
+  let valorBase = 0;
+  let nombreTransporte = "";
+
+  switch (tipo) {
+    case 1:
+      valorBase = 2500;
+      nombreTransporte = "Bus Urbano";
+      break;
+    case 2:
+      valorBase = 2800;
+      nombreTransporte = "Metro";
+      break;
+    case 3:
+      valorBase = 5000;
+      nombreTransporte = "Taxi";
+      break;
+    case 4:
+      valorBase = 10000;
+      nombreTransporte = "Intermunicipal";
+      break;
+    default:
+      document.write("Tipo de transporte no válido");
+      throw "Error en el tipo de transporte";
+  }
+
+  let descuento = 0;
+  let tipoCondicion = "";
+
+  if (condicion === 1) {
+    tipoCondicion = "Estudiante";
+    descuento = 0.20; 
+  } else if (condicion === 2) {
+    tipoCondicion = "Adulto mayor";
+    descuento = 0.30; 
+  } else {
+    tipoCondicion = "Ninguna";
+    descuento = 0; 
+  }
+
+  let valorDescuento = valorBase * descuento;
+  let totalPagar = valorBase - valorDescuento;
+
+  document.write("<p><b>Nombre:</b> " + nombre + "</p>");
+  document.write("<p><b>Tipo de transporte:</b> <span class='" +
+    (tipo==1?"bus":tipo==2?"metro":tipo==3?"taxi":"inter") +
+    "'>" + nombreTransporte + "</span></p>");
+  document.write("<p><b>Condición:</b> " + tipoCondicion + "</p>");
+  document.write("<p><b>Tarifa base:</b> $" + valorBase + "</p>");
+  document.write("<p><b>Descuento aplicado:</b> $" + valorDescuento + "</p>");
+  document.write("<p><b>Total a pagar:</b> $" + totalPagar + "</p>");
+</script>
+
+</body>
+</html>

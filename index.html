@@ -1,86 +1,110 @@
-
-  <title>Calculadora de Tarifas de Transporte</title>
-  <style>
-    body {
-      background-color: #eef6ff; 
-      font-family: Arial, sans-serif;
-      text-align: center; 
-      margin-top: 50px;
-    }
-    h1 {
-      color: #E53935;
-    }
-    p {
-      font-size: 18px;
-    }
-    .bus { color: green; }
-    .metro { color: blue; }
-    .taxi { color: orange; }
-    .inter { color: purple; }
-  </style>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Control de Producción</title>
+<style>
+body{
+    background-color:#f2d9f7;
+    font-family: Arial, Helvetica, sans-serif;
+}
+h1{
+    text-align:center;
+    background-color:#cc0000;
+    color:white;
+    padding:15px;
+}
+.cuadro{
+    background-color:white;
+    width:60%;
+    margin:auto;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+.bajo{ color:red; font-weight:bold; }
+.aceptable{ color:orange; font-weight:bold; }
+.excelente{ color:green; font-weight:bold; }
+</style>
 </head>
 <body>
-
-<h1>Calculadora de Tarifas</h1>
-
+<h1>Control de Producción</h1>
 <script>
-  
-  let nombre = prompt("Ingrese su nombre:");
-  let tipo = parseInt(prompt("Tipo de transporte:\n1=Bus Urbano\n2=Metro\n3=Taxi\n4=Intermunicipal"));
-  let condicion = parseInt(prompt("Condición especial:\n1=Estudiante\n2=Adulto mayor\n3=Ninguna"));
+var nombre, tipo, tipoIngresado, costo, piezas, total_piezas=0, continuar, rendimiento;
+var dias = [];
+var i=0;
 
-  let valorBase = 0;
-  let nombreTransporte = "";
+nombre = prompt("Ingrese el nombre del operario:");
+tipo = prompt("Ingrese el tipo de producto (A, B o C):");
+tipoIngresado = tipo; // Guarda A, B o C original
 
-  switch (tipo) {
-    case 1:
-      valorBase = 2500;
-      nombreTransporte = "Bus Urbano";
-      break;
-    case 2:
-      valorBase = 2800;
-      nombreTransporte = "Metro";
-      break;
-    case 3:
-      valorBase = 5000;
-      nombreTransporte = "Taxi";
-      break;
-    case 4:
-      valorBase = 10000;
-      nombreTransporte = "Intermunicipal";
-      break;
+switch(tipo.toUpperCase()){
+    case "A":
+        costo = 5000;
+        tipo = "Componente A";
+        break;
+    case "B":
+        costo = 7000;
+        tipo = "Componente B";
+        break;
+    case "C":
+        costo = 10000;
+        tipo = "Componente C";
+        break;
     default:
-      document.write("Tipo de transporte no válido");
-      throw "Error en el tipo de transporte";
-  }
+        alert("Tipo de producto no válido.");
+        costo = 0;
+        tipo = "Desconocido";
+}
 
-  let descuento = 0;
-  let tipoCondicion = "";
+do{
+    piezas = parseInt(prompt("Ingrese la cantidad de piezas producidas en el día " + (i+1) + ":"));
+    if(!isNaN(piezas) && piezas >= 0){
+        dias[i] = piezas;
+        total_piezas += piezas;
+        i++;
+    }else{
+        alert("Ingrese un valor válido.");
+    }
+    continuar = prompt("¿Desea registrar otro día? (si/no)");
+}while(continuar.toLowerCase() == "si");
 
-  if (condicion === 1) {
-    tipoCondicion = "Estudiante";
-    descuento = 0.20; 
-  } else if (condicion === 2) {
-    tipoCondicion = "Adulto mayor";
-    descuento = 0.30; 
-  } else {
-    tipoCondicion = "Ninguna";
-    descuento = 0; 
-  }
+var clase = "";
+if(total_piezas < 50){
+    rendimiento = "Bajo rendimiento";
+    clase = "bajo";
+}else if(total_piezas <= 100){
+    rendimiento = "Rendimiento aceptable";
+    clase = "aceptable";
+}else{
+    rendimiento = "Rendimiento excelente";
+    clase = "excelente";
+}
 
-  let valorDescuento = valorBase * descuento;
-  let totalPagar = valorBase - valorDescuento;
+var costo_total = total_piezas * costo;
 
-  document.write("<p><b>Nombre:</b> " + nombre + "</p>");
-  document.write("<p><b>Tipo de transporte:</b> <span class='" +
-    (tipo==1?"bus":tipo==2?"metro":tipo==3?"taxi":"inter") +
-    "'>" + nombreTransporte + "</span></p>");
-  document.write("<p><b>Condición:</b> " + tipoCondicion + "</p>");
-  document.write("<p><b>Tarifa base:</b> $" + valorBase + "</p>");
-  document.write("<p><b>Descuento aplicado:</b> $" + valorDescuento + "</p>");
-  document.write("<p><b>Total a pagar:</b> $" + totalPagar + "</p>");
+document.write("<div class='cuadro'>");
+document.write("<h2>Resultados Finales</h2>");
+
+document.write("<p><b>Nombre del operario:</b> " + nombre + "</p>");
+document.write("<p><b>Componente fabricado:</b> " + tipo + " (" + tipoIngresado.toUpperCase() + ")</p>");
+document.write("<p><b>Costo unitario:</b> $" + costo.toLocaleString() + "</p>");
+document.write("<p><b>Total de piezas producidas:</b> " + total_piezas + "</p>");
+document.write("<p><b>Costo total de producción:</b> $" + costo_total.toLocaleString() + "</p>");
+document.write("<p><b>Rendimiento:</b> <span class='" + clase + "'>" + rendimiento + "</span></p>");
+
+document.write("<hr>");
+document.write("<h3>Producción diaria</h3>");
+
+for(var j=0; j<dias.length; j++){
+    document.write("<p>Día " + (j+1) + ": " + dias[j] + " piezas</p>");
+}
+
+document.write("</div>");
 </script>
-
 </body>
-
 </html>
+  
+
+
+
